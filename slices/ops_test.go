@@ -1,9 +1,8 @@
-package tests
+package slices
 
 import (
 	"testing"
 
-	"github.com/Paola5858/vetores-golang/slices"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,7 +20,7 @@ func TestAppendSafe(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := slices.AppendSafe(tt.s, tt.val)
+			got := AppendSafe(tt.s, tt.val)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -41,7 +40,7 @@ func TestReverse(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := slices.Reverse(tt.s)
+			got := Reverse(tt.s)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -63,7 +62,7 @@ func TestIndexOf(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := slices.IndexOf(tt.s, tt.target)
+			got := IndexOf(tt.s, tt.target)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -82,17 +81,15 @@ func TestCopy(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := slices.Copy(tt.s)
+			got := Copy(tt.s)
 			assert.Equal(t, tt.want, got)
 			if tt.s != nil && len(tt.s) > 0 {
-				// Verify it's a different slice (not same reference)
 				tt.s[0] = 999
 				assert.NotEqual(t, tt.s[0], got[0])
 			}
 		})
 	}
 }
-
 
 func TestSort(t *testing.T) {
 	tests := []struct {
@@ -111,7 +108,7 @@ func TestSort(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			s := make([]int, len(tt.s))
 			copy(s, tt.s)
-			slices.Sort(s)
+			Sort(s)
 			assert.Equal(t, tt.want, s)
 		})
 	}
@@ -133,7 +130,7 @@ func TestBinarySearch(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := slices.BinarySearch(tt.s, tt.target)
+			got := BinarySearch(tt.s, tt.target)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -154,7 +151,7 @@ func TestMax(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, ok := slices.Max(tt.s)
+			got, ok := Max(tt.s)
 			assert.Equal(t, tt.wantOk, ok)
 			if ok {
 				assert.Equal(t, tt.want, got)
@@ -178,7 +175,7 @@ func TestMin(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, ok := slices.Min(tt.s)
+			got, ok := Min(tt.s)
 			assert.Equal(t, tt.wantOk, ok)
 			if ok {
 				assert.Equal(t, tt.want, got)
@@ -202,7 +199,7 @@ func TestSum(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := slices.Sum(tt.s)
+			got := Sum(tt.s)
 			assert.Equal(t, tt.want, got)
 		})
 	}

@@ -1,9 +1,11 @@
+// Package slices implementa operações eficientes em slices de inteiros.
+// Inclui append seguro, reverse, busca linear/binária e sort.
 package slices
 
-// VetorOps: slices como peões go — append xeque, reverse mate
-// senai lógico glow-up: o(1) ops nativas + custom
-
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // AppendSafe adiciona com check cap (evita realloc drama)
 func AppendSafe(s []int, val int) []int {
@@ -47,4 +49,55 @@ func Subslice(s []int, start, end int) []int {
 		return nil
 	}
 	return s[start:end]
+}
+
+// Sort ordena o slice in-place usando quicksort O(n log n)
+func Sort(s []int) {
+	sort.Ints(s)
+}
+
+// BinarySearch busca binária O(log n) - slice DEVE estar ordenado
+func BinarySearch(s []int, target int) int {
+	idx := sort.SearchInts(s, target)
+	if idx < len(s) && s[idx] == target {
+		return idx
+	}
+	return -1
+}
+
+// Max retorna o maior elemento O(n)
+func Max(s []int) (int, bool) {
+	if len(s) == 0 {
+		return 0, false
+	}
+	max := s[0]
+	for _, v := range s[1:] {
+		if v > max {
+			max = v
+		}
+	}
+	return max, true
+}
+
+// Min retorna o menor elemento O(n)
+func Min(s []int) (int, bool) {
+	if len(s) == 0 {
+		return 0, false
+	}
+	min := s[0]
+	for _, v := range s[1:] {
+		if v < min {
+			min = v
+		}
+	}
+	return min, true
+}
+
+// Sum retorna a soma de todos elementos O(n)
+func Sum(s []int) int {
+	sum := 0
+	for _, v := range s {
+		sum += v
+	}
+	return sum
 }
