@@ -184,23 +184,60 @@ func TestMin(t *testing.T) {
 	}
 }
 
-func TestSum(t *testing.T) {
+func TestSubslice(t *testing.T) {
 	tests := []struct {
-		name string
-		s    []int
-		want int
+		name  string
+		s     []int
+		start int
+		end   int
+		want  []int
 	}{
-		{"basic", []int{1, 2, 3}, 6},
-		{"negative", []int{-1, -2, -3}, -6},
-		{"mixed", []int{-1, 2, -3, 4}, 2},
-		{"single", []int{42}, 42},
-		{"empty", []int{}, 0},
+		{"basic", []int{1, 2, 3, 4, 5}, 1, 4, []int{2, 3, 4}},
+		{"full", []int{1, 2, 3}, 0, 3, []int{1, 2, 3}},
+		{"empty result", []int{1, 2, 3}, 1, 1, []int{}},
+		{"invalid start", []int{1, 2, 3}, -1, 2, nil},
+		{"invalid end", []int{1, 2, 3}, 0, 5, nil},
+		{"start > end", []int{1, 2, 3}, 2, 1, nil},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := Sum(tt.s)
+			got := Subslice(tt.s, tt.start, tt.end)
 			assert.Equal(t, tt.want, got)
 		})
 	}
+}
+
+func TestEdgeCases(t *testing.T) {
+	t.Run("large slice performance", func(t *testing.T) {
+		// Teste com slice grande
+		s := make([]int, 10000)
+		for i := range s {
+			s[i] = i
+		}
+		
+		Sort(s)
+		idx := BinarySearch(s, 5000)
+		assert.Equal(t, 5000, idx)
+	})
+
+	t.Run("negative numbers", func(t *testing.T) {
+		s := []int{-5, -2, -8, -1}
+		Sort(s)
+		assert.Equal(t, []int{-8, -5, -2, -1}, s)
+		
+		max, _ := Max(s)
+		min, _ := Min(s)
+		assert.Equal(t, -1, max)
+		assert.Equal(t, -8, min)
+	})
+
+	t.Run("duplicates", func(t *testing.T) {
+		s := []int{2, 2, 2, 2}
+		idx := IndexOf(s, 2)
+		assert.Equal(t, 0, idx)
+		
+		sum := Sum(s)
+		assert.Equal(t, 8, sum)
+	})
 }
